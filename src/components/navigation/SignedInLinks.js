@@ -4,7 +4,8 @@ import { Link, NavLink } from "react-router-dom";
 export default function SignedInLinks() {
   return (
     <div className="navbar_menu-list">
-      <NavLink exact to="/" className="navbar_menu-item">New project</NavLink>
+      <NavLink exact to="/" className="navbar_menu-item">Home</NavLink>
+      <NavLink to="/newproject" className="navbar_menu-item">New project</NavLink>
       <Link to="" className="navbar_menu-item">Log Out</Link>
       <Link to="" className="navbar_menu-item user-menu">
         <div className="user-menu_logo">
