@@ -1,0 +1,33 @@
+* {
+  box-sizing: border-box;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+input {
+  outline: none;
+  line-height: 1.5em;
+  color: inherit;
+}
+
+button {
+  outline: none;
+  cursor: pointer;
+}
+
+html, body {
+  background-color: #142d4c;
+  font-size: 16px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+
+  min-width: 900px;
+}
+
+.container {
+  margin: 0 auto;
+  padding: 0px 55px;
+  max-width: 1225px;
+}

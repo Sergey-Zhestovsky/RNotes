@@ -1,0 +1,15 @@
+.dashboard {
+  display: flex;
+}
+
+.projects-wrapper {
+  width: 70%;
+  height: 1000px;
+  flex-shrink: 0;
+}
+
+.notifications-wrapper {
+  background: green;
+  height: 1000px;
+  width: fill-available;
+}
