@@ -1,0 +1,11 @@
+{
+  "port": "3001",
+  "encode_server_key": "ZQ26e-0sxNw-d0fdz-rYqql-BzotU-0woTc",
+  "mongoDB_connect": {
+    "uri": "mongodb://localhost/ReactNotes",
+    "options": { 
+      "useNewUrlParser": "true", 
+      "useCreateIndex": "true" 
+    }
+  }
+}

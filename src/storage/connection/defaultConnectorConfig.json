@@ -1,0 +1,8 @@
+{
+  "projectConnector": {
+    "pathStructure": {
+      "root": "projects/",
+      "setProject": "create"
+    }
+  }
+}

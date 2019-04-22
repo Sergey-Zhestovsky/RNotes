@@ -9,11 +9,15 @@ import { createStore, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
 import rootReducer from "./storage/reducers/rootReducer";
 import thunk from "redux-thunk";
+import rootConnector from "./storage/connection/rootConnector";
 
-let store = createStore(rootReducer, applyMiddleware(thunk));
+let store = createStore(
+  rootReducer,
+  applyMiddleware(thunk.withExtraArgument(rootConnector))
+);
 
 ReactDOM.render(
-  <Provider store={store}><App /></Provider>, 
+  <Provider store={store}><App /></Provider>,
   document.getElementById('root')
 );
 serviceWorker.unregister();
