@@ -3,7 +3,8 @@ import React, { Component } from "react";
 const errorMessages = {
   "required": "Field is required",
   "maxSize": "Maximum number of characters exceeded",
-  "imageType": "File should be image"
+  "imageType": "File should be image",
+  "imageSize": "File to big"
 }
 
 export default function FormErrors(props) {
@@ -14,7 +15,7 @@ export default function FormErrors(props) {
 
     for (let i = 0; i < errorArray.length; i++) {
       errorBlocks.push(
-        <div className="create-project_error-block" key={error}>
+        <div className="create-project_error-block" key={`${error}:${i}`}>
           <div className="create-project_error-block-title">{error}:</div>
           <div className="create-project_error-block-message">{errorMessages[props.errors[error][i]]}</div>
         </div>

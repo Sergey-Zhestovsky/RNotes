@@ -1,8 +1,8 @@
 export function createProject(project) {
   return (dispatch, getState, { projectConnector }) => {
-    console.log(getState());
-    
-    projectConnector.getProjects()
+    console.log(project);
+
+    projectConnector.setProject(project)
       .then((result) => {
         console.log(result);
       }, rej => console.log(rej))

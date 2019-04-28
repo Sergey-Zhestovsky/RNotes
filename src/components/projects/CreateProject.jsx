@@ -6,13 +6,13 @@ import FormErrors from "./parts/FormErrors";
 import Validator from "../../js/validator";
 
 import "../../css/CreateProject.css";
-import { set } from "mongoose";
 
 class CreateProject extends Component {
   constructor(props) {
     super(props);
 
     this.messageMaxSize = 5000;
+    this.imageMaxSize = 20000000;
     this.imageType = /^image\/*/;
     this.dragCounter = 0;
     this.state = {
@@ -29,8 +29,11 @@ class CreateProject extends Component {
       title: ["required", ["maxSize", 50]],
       message: [["maxSize", this.messageMaxSize]],
       image: {
-        property: "type",
-        rules: [["test", this.imageType, "imageType"]]
+        property: ["type", "size"],
+        rules: [
+          ["test", this.imageType, "imageType"], 
+          ["larger", this.imageMaxSize, "imageSize"]
+        ]
       }
     });
   }
@@ -54,7 +57,7 @@ class CreateProject extends Component {
       errors
     });
 
-    if (Object.keys(errors) == 0)
+    if (Object.keys(errors).length == 0)
       this.props.createProject(project);
   }
 
@@ -70,7 +73,9 @@ class CreateProject extends Component {
     });
 
     if (!this.imageType.test(file.type))
-      return;
+      return this.setState({
+        backgroundImage: ""
+      });;
 
     let reader = new FileReader();
 
@@ -132,7 +137,7 @@ class CreateProject extends Component {
     return (
       <div className="create-project-wrapper">
         <div className="create-project container">
-          <form className="create-project_form" onSubmit={this.handleSubmit} onDragEnter={this.handleDragEnter} onDragLeave={this.handleDragEnd} onDrop={this.handleDrop} >
+          <form className="create-project_form" autocomplete="off" onSubmit={this.handleSubmit} onDragEnter={this.handleDragEnter} onDragLeave={this.handleDragEnd} onDrop={this.handleDrop} >
             <h2 className="create-project_form-title">Create Project</h2>
             <div className="create-project_form-block">
               <label className="create-project_form-block-title" htmlFor="title">Title</label>

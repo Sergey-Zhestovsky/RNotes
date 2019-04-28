@@ -26,8 +26,17 @@ export default class ProjectConnector extends Connector {
   }
 
   setProject(data) {
-    let path = this.pathStructure;
+    let path = this.pathStructure,
+    formData = new FormData();
 
-    return super.straightRequest(path.root + path.setProject, data);
+    for (let field in data) {
+      formData.append(field, data[field]);
+    }
+
+    return super.straightRequest(path.root + path.setProject, formData, undefined, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
   }
 }

@@ -5,7 +5,7 @@ export default class Connector {
     this.signRequests = signRequests;
   }
 
-  request(path, object, config) {
+  request(path, object, config, axiosConfig) {
     let requestObjcet = this.customRequest(path, object, config);
 
     this.defaultEntry(requestObjcet.request, path, object);
@@ -13,8 +13,12 @@ export default class Connector {
     return requestObjcet;
   }
 
-  straightRequest(path, object, config) {
-    return this.defaultEntry(this.customRequest(path, object, config).request, path, object)
+  straightRequest(path, object, config, axiosConfig) {
+    return this.defaultEntry(
+      this.customRequest(path, object, config, axiosConfig).request,
+      path,
+      object
+    );
   }
 
   defaultEntry(promise, path, object) {
@@ -28,7 +32,7 @@ export default class Connector {
       });
   }
 
-  customRequest(path, object, config = {}) {
+  customRequest(path, object, config = {}, axiosConfig = {}) {
     ({
       method: config.method = "post"
     } = config);
@@ -38,6 +42,7 @@ export default class Connector {
 
     let source = axios.CancelToken.source(),
       request = axios[config.method.toLowerCase()](path, object, {
+        ...axiosConfig,
         cancelToken: source.token
       })
         .then(({ data } = {}) => {

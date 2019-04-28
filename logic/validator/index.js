@@ -1,4 +1,4 @@
-export default class Validator {
+class Validator {
   constructor(config) {
     this.error = {};
     this.config = config;
@@ -17,7 +17,7 @@ export default class Validator {
     return this.error;
   }
 
-  validate = (values) => {
+  validate(values) {
     this.reset();
 
     for (let vKey in values) {
@@ -135,3 +135,5 @@ export default class Validator {
     }
   }
 }
+
+module.exports = Validator
