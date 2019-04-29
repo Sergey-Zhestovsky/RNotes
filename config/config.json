@@ -3,9 +3,13 @@
   "encode_server_key": "ZQ26e-0sxNw-d0fdz-rYqql-BzotU-0woTc",
   "mongoDB_connect": {
     "uri": "mongodb://localhost/ReactNotes",
+    "replica": "mongodb://DESKTOP-AH2PP3O:27017/ReactNotes?replicaSet=rs",
     "options": { 
       "useNewUrlParser": "true", 
       "useCreateIndex": "true" 
     }
+  },
+  "imageStorage": {
+    "projectImage": "/public/img/uploads/"
   }
 }

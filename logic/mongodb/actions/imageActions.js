@@ -2,16 +2,17 @@ let mongoose = require("../connect"),
   schemas = require("../schemas"),
   errorHandler = require("../errorHandler");
 
-function setImage({ data, cb = function () { } } = {}) {
-  let image = new schemas.ProjectImage(data);
+  async function setImage(data, config) {
+  let image = new schemas.ProjectImage(data),
+    responce;
 
-  image.save(function (err, value) {
-    if (err) {
-      return errorHandler("setImage", err, cb);
-    }
+  try {
+    responce = await image.save(config);
+  } catch (error) {
+    return Promise.reject(errorHandler("setImage", error));
+  }
 
-    cb(null, value);
-  });
+  return responce;
 }
 
 module.exports = {

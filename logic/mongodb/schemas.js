@@ -7,11 +7,12 @@ let projectScheme = new Schema({
     type: String,
     required: true
   },
-  context: {
+  message: {
     type: String
   },
   image: {
-    type: Schema.Types.ObjectId
+    type: Schema.Types.ObjectId,
+    default: null
   }
 }, { versionKey: false });
 
@@ -20,6 +21,10 @@ let projectImageScheme = new Schema({
     type: String,
     required: true
   }, 
+  originalname: {
+    type: String,
+    required: true
+  },
   size: {
     type: Number,
     required: true

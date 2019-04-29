@@ -5,12 +5,17 @@ function errorHandler(functionName = "default", err, cb) {
     (config.default && config.default[err.code]) ||
     err.errmsg;
 
-  return cb({
+  let result = {
     origin: err,
     source: functionName,
     describe,
     code: err.code
-  });
+  };
+
+  if (cb)
+    return cb(result);
+
+  return result;
 }
 
 module.exports = errorHandler;

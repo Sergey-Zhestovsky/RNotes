@@ -5,11 +5,11 @@ export function createProject(project) {
     projectConnector.setProject(project)
       .then((result) => {
         console.log(result);
-      }, rej => console.log(rej))
-
-    dispatch({
-      type: "CREATE_PROJECT",
-      project
-    });
+        dispatch({
+          type: "CREATE_PROJECT",
+          project: result
+        });
+      })
+      .catch(error => console.error(error))
   }
 }

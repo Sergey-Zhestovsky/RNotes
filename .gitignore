@@ -13,7 +13,7 @@
 /public/img
 /src/fonts
 /src/img
-
+/data/
 # misc
 .DS_Store
 .env.local

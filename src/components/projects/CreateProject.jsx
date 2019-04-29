@@ -137,7 +137,7 @@ class CreateProject extends Component {
     return (
       <div className="create-project-wrapper">
         <div className="create-project container">
-          <form className="create-project_form" autocomplete="off" onSubmit={this.handleSubmit} onDragEnter={this.handleDragEnter} onDragLeave={this.handleDragEnd} onDrop={this.handleDrop} >
+          <form className="create-project_form" autoComplete="off" onSubmit={this.handleSubmit} onDragEnter={this.handleDragEnter} onDragLeave={this.handleDragEnd} onDrop={this.handleDrop} >
             <h2 className="create-project_form-title">Create Project</h2>
             <div className="create-project_form-block">
               <label className="create-project_form-block-title" htmlFor="title">Title</label>

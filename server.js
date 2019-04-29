@@ -11,6 +11,8 @@ let entryRouter = require("./routes/entry"),
 
 let app = express();
 
+app.set("dir", __dirname);
+
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
