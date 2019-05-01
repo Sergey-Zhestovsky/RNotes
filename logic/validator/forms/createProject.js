@@ -7,6 +7,7 @@ module.exports = {
     return {
       title: ["required", ["maxSize", this.titleMaxSize]],
       message: [["maxSize", this.messageMaxSize]],
+      date: ["required"],
       image: {
         property: ["mimetype", "size"],
         rules: [

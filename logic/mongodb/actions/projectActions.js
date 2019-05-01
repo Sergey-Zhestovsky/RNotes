@@ -20,19 +20,42 @@ async function getProjects({ searchDetails = {}, data } = {}, config = {}) {
         path: "$image",
         preserveNullAndEmptyArrays: true
       }
-    }]).session(config.session);
+    }, {
+      $lookup: {
+        from: 'users',
+        localField: 'user',
+        foreignField: '_id',
+        as: 'user'
+      }
+    }, {
+      $unwind: {
+        path: "$user",
+        preserveNullAndEmptyArrays: true
+      }
+    }, {
+      $addFields: { 
+        image: { $concat: [{ $toString: "$image._id" }, ".", "$image.extension"] },
+        user: "$user.fullName"
+      } 
+    }
+  ]).session(config.session);
   } catch (error) {
     return Promise.reject(errorHandler("getProjects", error));
   }
+console.log(projects);
 
   return projects;
 }
 
-async function getProject(searchDetails, config) {
+async function getProject(searchDetails = {}, config) {
   let project;
 
+  searchDetails._id = searchDetails._id
+    ? new mongoose.Types.ObjectId(searchDetails._id)
+    : undefined;
+
   try {
-    project = await getProjects(searchDetails, config);
+    project = await getProjects({ searchDetails }, config);
   } catch (error) {
     return Promise.reject(errorHandler("getProject", error));
   }

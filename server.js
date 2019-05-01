@@ -7,6 +7,7 @@ let express = require("express"),
 
 let entryRouter = require("./routes/entry"),
   projectsRouter = require("./routes/projects"),
+  authRouter = require("./routes/authorization"),
   errorRouter = require("./routes/error");
 
 let app = express();
@@ -20,6 +21,7 @@ app.use(cookieParser());
 
 app.all("*", entryRouter);
 app.use("/projects", projectsRouter);
+app.use("/authorization", authRouter);
 
 app.use(errorRouter.error);
 app.use(errorRouter.devError);

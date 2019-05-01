@@ -27,8 +27,6 @@ export default class Connector {
         return Promise.resolve(result);
       }, ({ error, result }) => {
         return Promise.resolve(this.ErrorHandler(path, object, error, result));
-      }).catch((error) => {
-        console.error(error);
       });
   }
 

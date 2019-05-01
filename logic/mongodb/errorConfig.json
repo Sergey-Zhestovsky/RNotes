@@ -1,5 +1,11 @@
 {
   "default": {
     "11000": "duplicate required values"
+  },
+  "authorizeUser": {
+    "custom001": "wrong email or password"
+  },
+  "setUser": {
+    "custom002": "email already exists"
   }
 }

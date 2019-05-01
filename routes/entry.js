@@ -1,17 +1,25 @@
-let express = require('express'),
-    router = express.Router(),
-    config = require('../config');
+let express = require("express"),
+  router = express.Router(),
+  config = require("../config"),
+  Authorization = require("../logic/authorization");
 
-router.all('*', function(req, res, next) {
+let auth = new Authorization();
+
+router.all('*', function (req, res, next) {
   new Promise((resolve, reject) => {
     req.data = {};
-    resolve(
-      //[req, res]
-    );
+    if (req.cookies)
+      resolve();
+    
+    reject();
   })
-
+    .then(
+      auth.authorize.bind(auth, req, res),
+      () => void 1)
     .then(next)
-    .catch(([req, res]) => {
+    .catch((error) => {
+      console.error(error);
+      
       return res.header("Connection", "close").destroy();
     });
 });

@@ -1,8 +1,11 @@
 import ProjectConnector from "./projectConnector";
-let config = require("./defaultConnectorConfig.json");
+import UserConnector from "./userConnector";
 
-let projectConnector = new ProjectConnector(config.projectConnector);
+let config = require("./defaultConnectorConfig.json"),
+  projectConnector = new ProjectConnector(config.projectConnector),
+  userConnector = new UserConnector(config.userConnector);
 
 export default {
-  projectConnector
+  projectConnector,
+  userConnector
 };

@@ -4,7 +4,7 @@ let mongoose = require("mongoose"),
 
 mongoose.connect(config.mongoDB_connect.replica, config.mongoDB_connect.options)
   .then(setCollections,
-    err => {
+    error => {
       console.error(error);
     }
   );

@@ -4,6 +4,8 @@ import { createProject } from "../../storage/actions/projectActions";
 import FileInput from "./parts/FileInput";
 import FormErrors from "./parts/FormErrors";
 import Validator from "../../js/validator";
+import Authorization from "../../hoc/Authorization";
+
 
 import "../../css/CreateProject.css";
 
@@ -57,8 +59,11 @@ class CreateProject extends Component {
       errors
     });
 
-    if (Object.keys(errors).length == 0)
+    if (Object.keys(errors).length == 0) {
+      project.date = Date.now();
       this.props.createProject(project);
+      this.props.history.push('/');
+    }
   }
 
   onImageAdded = (file) => {
@@ -175,4 +180,5 @@ function mapDispatchToProps(dispatch) {
   }
 }
 
-export default connect(null, mapDispatchToProps)(CreateProject);
+export default connect(null, mapDispatchToProps)
+  (Authorization(CreateProject, { authorized: true, redirect: "/signin" }));

@@ -4,6 +4,7 @@ let mongoose = require("../connect"),
 
   projectActions = require("./projectActions"),
   projectImageActions = require("./imageActions");
+  userActions = require("./userActions");
 
 async function createProject(data = {}) {
   let image = {}, project, result, session;
@@ -20,9 +21,7 @@ async function createProject(data = {}) {
       image: image["_id"]
     }, { session });
     
-    result = await projectActions.getProject({
-      searchDetails: project
-    }, { session });
+    result = await projectActions.getProject(project, { session });
 
     await session.commitTransaction();
   } catch (error) {
@@ -41,5 +40,6 @@ async function createProject(data = {}) {
 module.exports = {
   project: projectActions,
   image: projectImageActions,
+  user: userActions,
   createProject
 };

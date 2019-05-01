@@ -20,30 +20,38 @@ class Validator {
   validate(values) {
     this.reset();
 
-    for (let vKey in values) {
-      if (vKey in this.config) {
-        let field = this.config[vKey],
-          isrequired = false,
-          currentProp = setProperty(field.property),
-          value;
+    for (let fieldName in this.config) {
+      let fieldConfig = this.config[fieldName],
+        isrequired = false,
+        currentProp = setProperty(fieldConfig.property),
+        value;
 
-        for (let i = 0; i < field.rules.length; i++) {
-          let rule = field.rules[i];
-          if (Array.isArray(rule))
-            rule = Validator.setOption(...rule);
+      for (let i = 0; i < fieldConfig.rules.length; i++) {
+        let rule = fieldConfig.rules[i];
 
-          rule === "required" && (isrequired = true);
-          value = currentProp ? values[vKey][currentProp.getProperty()] : values[vKey];
-          chooseTest(rule, vKey, value, this.error);
-        }
+        if (Array.isArray(rule))
+          rule = Validator.setOption(...rule);
 
-        if (!isrequired && value == undefined )
-          delete this.error[vKey];
+        rule === "required" && (isrequired = true);
+        value = setValue(values, fieldName, currentProp);
+        chooseTest(rule, fieldName, value, values, this.error);
       }
+
+      if (!isrequired && value == undefined)
+        delete this.error[fieldName];
+    }
+    
+    function setValue(values, valueName, fieldProperty) {
+      if (!values[valueName])
+        return null;
+
+      return fieldProperty
+        ? values[valueName][fieldProperty.getProperty()]
+        : values[valueName];
     }
 
     function setProperty(prop) {
-      if (prop == undefined)
+      if (prop == null)
         return;
 
       let result = {
@@ -57,31 +65,31 @@ class Validator {
         result.prop = prop;
       else
         result.prop = [prop];
-      
+
       return result;
     }
 
-    function chooseTest(option, key, data, error) {
+    function chooseTest(option, key, value, allValues, error) {
       let isError = false;
       
       switch (option.toString()) {
         case "required":
-          isError = required(data);
+          isError = required(value);
           break;
         case "email":
-          isError = email(data);
+          isError = email(value);
           break;
         case "password":
-          isError = password(data, option.value);
+          isError = password(value, allValues[option.value]);
           break;
         case "maxSize":
-          isError = maxSize(data, option.value);
+          isError = maxSize(value, option.value);
           break;
         case "larger":
-          isError = larger(data, option.value);
+          isError = larger(value, option.value);
           break;
         case "test":
-          isError = test(data, option.value);
+          isError = test(value, option.value);
           break;
         default:
           break;
@@ -90,9 +98,9 @@ class Validator {
       if (isError) {
         let name = option.describe || option.toString();
 
-        error[key] && 
-        (error[key].push(name)) || 
-        (error[key] = [name]);
+        error[key] &&
+          (error[key].push(name)) ||
+          (error[key] = [name]);
       }
     }
 
@@ -100,7 +108,10 @@ class Validator {
       return (data === undefined || data == "" || data === null);
     }
 
-    function maxSize(data = "", size) {
+    function maxSize(data, size) {
+      if (data === null)
+        return;
+
       return data.toString().length > size;
     }
 

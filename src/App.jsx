@@ -6,13 +6,16 @@ import ProjectDetails from "./components/projects/ProjectDetails";
 import CreateProject from "./components/projects/CreateProject";
 import SignIn from "./components/auth/SignIn";
 import SignUp from "./components/auth/SignUp";
+import {connect} from "react-redux";
 
 class App extends Component {
   render() {
+    let { authorization } = this.props;
+
     return (
       <Router>
         <div className="App">
-          <Navbar />
+          <Navbar authorization={authorization} />
           <Switch>
               <Route path={["/", "/dashboard"]} exact component={Dashboard} />
               <Route path={"/project/:id"} component={ProjectDetails} />
@@ -26,4 +29,10 @@ class App extends Component {
   }
 }
 
-export default App;
+function mapStateToProps(state) {
+  return {
+    authorization: state.auth
+  };
+}
+
+export default connect(mapStateToProps)(App);

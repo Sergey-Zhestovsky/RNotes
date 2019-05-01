@@ -31,6 +31,7 @@
 }
 
 .project-block_info {
+  flex-grow: 1;
   padding: 10px 20px;
   overflow: hidden;
 }

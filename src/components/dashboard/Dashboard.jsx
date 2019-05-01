@@ -2,16 +2,14 @@ import React, { Component } from "react";
 import Notifications from "./Notifications";
 import ProjectList from "../projects/ProjectList";
 import { connect } from "react-redux";
-import axios from "axios";
+import { getProjects } from "../../storage/actions/projectActions";
+import Authorization from "../../hoc/Authorization";
 
 import "../../css/Dashboard.css"
 
 class Dashboard extends Component {
   componentDidMount() {
-    axios.get('projects/')
-      .then(function (response) {
-        console.log(response);
-      })
+    this.props.getProjects();
   }
 
   render() {
@@ -38,4 +36,11 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(Dashboard);
+function mapDispatchToProps(dispatch) {
+  return {
+    getProjects: () => dispatch(getProjects())
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)
+  (Authorization(Dashboard, { authorized: true, redirect: "/signin" }));

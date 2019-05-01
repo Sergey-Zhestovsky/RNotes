@@ -1,34 +1,62 @@
 import React, { Component } from "react";
+import rootConnector from "../../storage/connection/rootConnector";
+import ProjectDatailsPlaceholder from "./parts/ProjectDatailsPlaceholder";
+import ProjectDatailsPlug from "./parts/ProjectDatailsPlug";
+import Authorization from "../../hoc/Authorization";
 
 import "../../css/ProjectDetails.css"
 
-export default function ProjectDetails(props) {
-  let href = 'https://caffaknitted.typepad.com/.a/6a00e54f8f86dc883401287636e5db970c-800wi',
-    style = {
-      backgroundImage: `url(${href})`
+class ProjectDetails extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      isFound: true,
+      project: null
     };
-  return (
-    <div className="project-wrapper">
-      <div className="project">
-        <div className="project_header">
-          <div className="project_header-title">Project Title</div>
-          <div className="project_header-background" style={style}></div>
-        </div>
-        <div className="project_body container">
-          <div className="project_body-main">
-            <div className="project_body-main-image">
-              <img src={href} alt="" />
-            </div>
-            <div className="project_body-main-text">
-              <div className="project_body-main-context">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Porro quaerat unde vitae, labore eligendi veritatis illo consectetur quis rem, libero eum optio perferendis commodi totam deserunt nulla aliquam. Fugit nam sit velit deserunt reprehenderit adipisci autem impedit iusto soluta. Fugit assumenda adipisci voluptas sunt corporis aut aliquam temporibus, quae omnis, hic necessitatibus fuga sapiente enim ea repellat delectus ullam ab voluptatibus aperiam dignissimos laboriosam veniam ex inventore. Autem et sunt aliquam tenetur dolor accusamus iusto quasi totam quos mollitia vitae molestiae, nihil minus quod illum fugit odit distinctio laudantium maiores voluptas at blanditiis asperiores dignissimos. Quia sint eius impedit quisquam?</div>
-              <div className="project_body-main-info">
-                <div className="project_body-main-info-data">Posted by Sergey Z</div>
-                <div className="project_body-main-info-data">10.10.1994</div>
-              </div>
-            </div>
-          </div>
+
+    this.getProject(this.props.match.params.id);
+  }
+
+  getProject = (id) => {
+    return rootConnector.projectConnector.getProject(id)
+      .then((result) => {
+        if (!result)
+          return this.setState({
+            isFound: false
+          })
+
+        return this.setState({
+          project: result
+        })
+      }, (error) => {
+        this.setState({
+          isFound: false
+        })
+      })
+
+  }
+
+  onBackButtonClick = (e) => {
+    return this.props.history.push('/');
+  }
+
+  render() {
+    return (
+      <div className="project-wrapper">
+        <div className="project">
+          {
+            this.state.project
+              ? <ProjectDatailsPlaceholder project={this.state.project} />
+              : <ProjectDatailsPlug
+                foundState={this.state.isFound}
+                handleClick={this.onBackButtonClick} />
+          }
         </div>
       </div>
-    </div>
-  );
+    );
+  }
+
 }
+
+export default Authorization(ProjectDetails, { authorized: true, redirect: "/signin" });

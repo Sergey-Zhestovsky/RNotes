@@ -1,8 +1,17 @@
 {
   "projectConnector": {
     "pathStructure": {
-      "root": "projects/",
+      "root": "/projects/",
+      "getProject": "project",
       "setProject": "create"
+    }
+  },
+  "userConnector": {
+    "pathStructure": {
+      "root": "/authorization/",
+      "setUser": "signup",
+      "logout": "logout",
+      "login": "login"
     }
   }
 }

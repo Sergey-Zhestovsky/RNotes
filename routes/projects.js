@@ -3,10 +3,13 @@ let express = require("express"),
   mongo = require("../logic/mongodb/API"),
   fs = require("fs").promises,
   config = require("../config"),
-  //errorGenerator = require('../logic/error-generator'),
+  answerGenerator = require("../logic/modules/answerGenerator"),  
   Validator = require("../logic/validator"),
   createProjectRule = require("../logic/validator/forms/createProject").rule(),
   createProjectValidator = new Validator(createProjectRule),
+  getProProjectValidator = new Validator({
+    _id: ["required"]
+  }),
   multer = require("multer"),
   upload = multer();
 
@@ -15,28 +18,41 @@ router.all("*", function (req, res, next) {
 });
 
 router.get("/", function (req, res, next) {
-  mongo.getProjects({
-    cb: (error, result) => {
-      if (error)
-        return res.send({ error });
 
-      return res.send({ error, result });
-    }
-  });
+  return mongo.project.getProjects()
+    .then(result => {
+      res.send( answerGenerator(null, result) );
+    }, error => {
+      res.send( answerGenerator(error) )
+    });
+});
 
-  let data = {
-    projects: [
-      { id: "1", title: "title for №1", context: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quo, hic?", date: "10.10.1994", img: "https://caffaknitted.typepad.com/.a/6a00e54f8f86dc883401287636e5db970c-800wi" },
-      { id: "2", title: "title for №2", context: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quo, hic?", date: "11.10.1994", img: "https://i.kym-cdn.com/photos/images/facebook/000/035/751/41645-pikaman1_super.jpg" },
-      { id: "3", title: "title for №3", context: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quo, hic?", date: "12.10.1994", img: "http://pluspng.com/img-png/random-png-image-mabel-s-sweater-creator-random-gnome-png-gravity-falls-wiki-fandom-powered-by-wikia-510.png" }
-    ]
-  };
+router.post("/project", function (req, res, next) {
+  let data = req.body,
+    validationErrors;
+
+    validationErrors = getProProjectValidator.validate(data);
+
+    if (Object.keys(validationErrors).length !== 0)
+      return res.send(answerGenerator.error.requireData());
+
+  return mongo.project.getProject(data)
+    .then(result => {
+      res.send( answerGenerator(null, result) );
+    }, error => {
+      res.send( answerGenerator(error) )
+    });
 });
 
 router.post("/create", upload.single("image"), function (req, res, next) {
+  if (!req.data.user)
+    return res.send(answerGenerator.error.accessError());
+
   let image = req.file,
+    user = req.data.user.user,
     data = {
-      ...req.body
+      ...req.body,
+      user: user.id
     },
     validationErrors;
 
@@ -52,7 +68,7 @@ router.post("/create", upload.single("image"), function (req, res, next) {
   validationErrors = createProjectValidator.validate(data);
 
   if (Object.keys(validationErrors).length !== 0)
-    return res.send({ error: "wrong data", result: {} });
+    return res.send(answerGenerator.error.requireData());
 
   mongo.createProject(data)
     .then((result) => {
@@ -63,17 +79,17 @@ router.post("/create", upload.single("image"), function (req, res, next) {
 
         return fs.writeFile(filePath, image.buffer)
           .then(() => result)
-          .catch((error) => { throw error })
+          .catch((error) => { throw error; })
       }
 
       return Promise.resolve(result);
     }, (error) => {
-      return res.send({ error });
+      return res.send( answerGenerator(error) );
     })
     .then((result) => {
-      return res.send({ error: null, result });
+      return res.send( answerGenerator(null, result) );
     }, (error) => {
-      return res.send({ error });
+      return res.send( answerGenerator(error) );
     });
 });
 
