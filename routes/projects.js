@@ -3,27 +3,38 @@ let express = require("express"),
   mongo = require("../logic/mongodb/API"),
   fs = require("fs").promises,
   config = require("../config"),
-  answerGenerator = require("../logic/modules/answerGenerator"),  
+  answerGenerator = require("../logic/modules/answerGenerator"),
+  multer = require("multer"),
+  upload = multer(),
+
   Validator = require("../logic/validator"),
   createProjectRule = require("../logic/validator/forms/createProject").rule(),
   createProjectValidator = new Validator(createProjectRule),
   getProProjectValidator = new Validator({
     _id: ["required"]
   }),
-  multer = require("multer"),
-  upload = multer();
+  getProProjectsValidator = new Validator({
+    length: ["number", "positive"]
+  });
 
 router.all("*", function (req, res, next) {
   next();
 });
 
-router.get("/", function (req, res, next) {
+router.post("/", function (req, res, next) {
+  let data = req.body,
+    validationErrors;
 
-  return mongo.project.getProjects()
+  validationErrors = getProProjectsValidator.validate(data);
+
+  if (Object.keys(validationErrors).length !== 0)
+    return res.send(answerGenerator.error.requireData());
+
+  return mongo.project.getProjects(data)
     .then(result => {
-      res.send( answerGenerator(null, result) );
+      res.send(answerGenerator(null, { projects: result, time: Date.now() }));
     }, error => {
-      res.send( answerGenerator(error) )
+      res.send(answerGenerator(error))
     });
 });
 
@@ -31,16 +42,16 @@ router.post("/project", function (req, res, next) {
   let data = req.body,
     validationErrors;
 
-    validationErrors = getProProjectValidator.validate(data);
+  validationErrors = getProProjectValidator.validate(data);
 
-    if (Object.keys(validationErrors).length !== 0)
-      return res.send(answerGenerator.error.requireData());
+  if (Object.keys(validationErrors).length !== 0)
+    return res.send(answerGenerator.error.requireData());
 
   return mongo.project.getProject(data)
     .then(result => {
-      res.send( answerGenerator(null, result) );
+      res.send(answerGenerator(null, result));
     }, error => {
-      res.send( answerGenerator(error) )
+      res.send(answerGenerator(error))
     });
 });
 
@@ -74,22 +85,21 @@ router.post("/create", upload.single("image"), function (req, res, next) {
     .then((result) => {
       if (image) {
         let relPath = config.imageStorage.projectImage,
-          imageName = result.image._id + "." + result.image.extension,
-          filePath = `${req.app.get("dir")}${relPath}${imageName}`;
+          filePath = `${req.app.get("dir")}${relPath}${result.image}`;
 
         return fs.writeFile(filePath, image.buffer)
           .then(() => result)
           .catch((error) => { throw error; })
+      } else {
+        return Promise.resolve(result);
       }
-
-      return Promise.resolve(result);
     }, (error) => {
-      return res.send( answerGenerator(error) );
+      return res.send(answerGenerator(error));
     })
     .then((result) => {
-      return res.send( answerGenerator(null, result) );
+      return res.send(answerGenerator(null, { project: result, time: Date.now() }));
     }, (error) => {
-      return res.send( answerGenerator(error) );
+      return res.send(answerGenerator(error));
     });
 });
 

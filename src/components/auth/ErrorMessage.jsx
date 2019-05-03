@@ -1,10 +1,11 @@
-import React, { Component } from "react";
+import React from "react";
 
 const errorMessages = {
   "required": "Field is required",
   "maxSize": "Maximum number of characters exceeded",
   "email": "Enter correct email",
-  "password": "Passwords do not match"
+  "password": "Passwords do not match",
+  "fullName": "Enter a full name"
 }
 
 export default function ErrorMessage(props) {

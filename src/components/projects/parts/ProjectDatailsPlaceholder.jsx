@@ -1,4 +1,5 @@
-import React, { Component } from "react";
+import React from "react";
+import moment from "moment";
 
 export default function projectDatailsPlaceholder(props) {
   let { project } = props,
@@ -25,7 +26,7 @@ export default function projectDatailsPlaceholder(props) {
             <div className="project_body-main-context">{project.message}</div>
             <div className="project_body-main-info">
               <div className="project_body-main-info-data">Posted by {project.user}</div>
-              <div className="project_body-main-info-data">{date.toUTCString()}</div>
+              <div className="project_body-main-info-data">{moment(date).calendar()}</div>
             </div>
           </div>
         </div>

@@ -24,18 +24,21 @@ class SignUp extends Component {
     this.maxFieldSize = 100;
     this.validator = new Validator({
       email: ["required", "email", ["maxSize", this.maxFieldSize]],
-      fullName: ["required", ["maxSize", this.maxFieldSize]],
+      fullName: ["required", "fullName", ["maxSize", this.maxFieldSize]],
       password: ["required", ["maxSize", this.maxFieldSize], ["password", "rePassword"]],
       rePassword: ["required"]
     });
   }
-  
+
 
   handleChange = (e) => {
+    let passwordField = e.target.type === "password",
+      value = passwordField ? e.target.value : e.target.value.trim();
+
     this.setState({
       form: {
         ...this.state.form,
-        [e.target.id]: e.target.value
+        [e.target.id]: value
       }
     });
   }
@@ -50,7 +53,7 @@ class SignUp extends Component {
       errors
     });
 
-    if (Object.keys(errors).length == 0)
+    if (Object.keys(errors).length === 0)
       this.props.signUp(user);
   }
 
@@ -61,22 +64,22 @@ class SignUp extends Component {
           <h2 className="authorization_form-title">Sign Up</h2>
           <div className="authorization_form-block">
             <label htmlFor="fullName">Full Name</label>
-            <input type="text" name="fullName" id="fullName" onChange={this.handleChange}/>
+            <input type="text" name="fullName" id="fullName" onChange={this.handleChange} />
             <ErrorMessage error={this.state.errors.fullName} />
           </div>
           <div className="authorization_form-block">
             <label htmlFor="email">Email</label>
-            <input type="text" name="email" id="email" onChange={this.handleChange}/>
+            <input type="text" name="email" id="email" onChange={this.handleChange} />
             <ErrorMessage error={this.state.errors.email} />
           </div>
           <div className="authorization_form-block">
             <label htmlFor="password">Password</label>
-            <input type="password" name="password" id="password" onChange={this.handleChange}/>
+            <input type="password" name="password" id="password" onChange={this.handleChange} />
             <ErrorMessage error={this.state.errors.password} />
           </div>
           <div className="authorization_form-block">
             <label htmlFor="rePassword">Repeat password</label>
-            <input type="password" name="rePassword" id="rePassword" onChange={this.handleChange}/>
+            <input type="password" name="rePassword" id="rePassword" onChange={this.handleChange} />
             <ErrorMessage error={this.state.errors.rePassword} />
           </div>
           <ServerErrorMessage error={this.props.authError} />
@@ -101,5 +104,6 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)
-  (Authorization (SignUp, { authorized: false, redirect: "/" }));
+export default connect(mapStateToProps, mapDispatchToProps)(
+  Authorization(SignUp, { authorized: false, redirect: "/" })
+);

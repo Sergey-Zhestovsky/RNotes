@@ -47,7 +47,7 @@ class Authorization {
       let errors = userValidator.validate(user);
 
       if (Object.keys(errors).length > 0)
-        reject(errors);
+        return reject(errors);
 
       let authUser = new this.authClass(user);
       request.data.user = authUser;
@@ -65,7 +65,7 @@ class Authorization {
         expires: this.expiresTime
       });
 
-      resolve(authUser);
+      return resolve(authUser);
     });
   }
 }

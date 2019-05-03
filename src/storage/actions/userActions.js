@@ -1,10 +1,10 @@
 export function signUp(user) {
   return (dispatch, getState, { userConnector }) => {
     userConnector.setUser(user)
-      .then(result => {
+      .then(user => {
         dispatch({
           type: "SIGNUP_SUCCES",
-          user: result
+          user
         });
       })
       .catch(error => {
@@ -36,17 +36,33 @@ export function signOut() {
 export function signIn(user) {
   return (dispatch, getState, { userConnector }) => {
     userConnector.login(user)
-      .then(result => {
+      .then(user => {
         dispatch({
           type: "SIGNIN_SUCCES",
-          user: result
+          user
         });
       })
       .catch(error => {
-        console.log(error);
-        
         dispatch({
           type: "SIGNIN_ERROR",
+          error
+        });
+      });
+  }
+}
+
+export function getUserPublicData() {
+  return (dispatch, getState, { userConnector }) => {
+    userConnector.getUserPublicData()
+      .then(user => {
+        dispatch({
+          type: "USER_PUBLIC_DATA_SUCCES",
+          user
+        });
+      })
+      .catch(error => {
+        dispatch({
+          type: "USER_PUBLIC_DATA_ERROR",
           error
         });
       });

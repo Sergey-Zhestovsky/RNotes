@@ -1,4 +1,5 @@
 import React from "react";
+import moment from "moment";
 
 export default function ProjectSummary({ project }) {
   let style = {
@@ -14,7 +15,7 @@ export default function ProjectSummary({ project }) {
       <div className="project-block_info">
         <div className="project-block_info-text info-title">{project.title}</div>
         <div className="project-block_info-text info-context">{project.message}</div>
-        <div className="project-block_info-text info-date">{date.toUTCString()}</div>
+        <div className="project-block_info-text info-date">{moment(date).calendar()}</div>
       </div>
     </div>
   );

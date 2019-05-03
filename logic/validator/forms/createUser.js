@@ -5,7 +5,7 @@ module.exports = {
   rule() {
     return {
       email: ["required", "email", ["maxSize", this.mailMaxSize]],
-      fullName: ["required", ["maxSize", this.fullNameMaxSize]],
+      fullName: ["required", "fullName", ["maxSize", this.fullNameMaxSize]],
       password: ["required", ["maxSize", this.passwordMaxSize], ["password", "rePassword"]],
       rePassword: ["required"]
     }

@@ -2,7 +2,7 @@ let mongoose = require("mongoose"),
   crypto = require("crypto"),
   Schema = mongoose.Schema;
 
-let projectScheme = new Schema({
+let projectSchema = new Schema({
   title: {
     type: String,
     required: true
@@ -15,7 +15,7 @@ let projectScheme = new Schema({
     default: null
   },
   date: {
-    type: String,
+    type: Number,
     required: true
   },
   user: {
@@ -24,7 +24,7 @@ let projectScheme = new Schema({
   }
 }, { versionKey: false });
 
-let projectImageScheme = new Schema({
+let projectImageSchema = new Schema({
   extension: {
     type: String,
     required: true
@@ -39,7 +39,7 @@ let projectImageScheme = new Schema({
   }
 }, { versionKey: false });
 
-let userScheme = new Schema({
+let userSchema = new Schema({
   fullName: {
       type: String,
       required: true
@@ -59,22 +59,38 @@ let userScheme = new Schema({
   }
 }, { versionKey: false });
 
-userScheme.virtual("password")
+userSchema.virtual("password")
   .set(function(pass) {
       this.salt = crypto.randomBytes(10).toString('hex');
       this.userPassword = this.encryptPassword(pass)
   })
   .get(() => this.userPassword)
 
-userScheme.methods.encryptPassword = function (password) {
+userSchema.methods.encryptPassword = function (password) {
   return crypto.createHmac('sha256', this.salt).update(password).digest('hex');
 }
-userScheme.methods.checkPassword = function (password) {
+userSchema.methods.checkPassword = function (password) {
   return this.encryptPassword(password) === this.userPassword;
 }
 
+let notificationSchema = new Schema({
+  user: {
+    type: Schema.Types.ObjectId,
+    required: true
+  }, 
+  action: {
+    type: String,
+    required: true
+  },
+  date: {
+    type: Number,
+    required: true
+  }
+}, { versionKey: false });
+
 module.exports = {
-  Project: mongoose.model('Project', projectScheme),
-  ProjectImage: mongoose.model('ProjectImage', projectImageScheme),
-  User: mongoose.model('User', userScheme)
+  projectSchema,
+  projectImageSchema,
+  userSchema,
+  notificationSchema
 }

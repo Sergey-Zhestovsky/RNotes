@@ -37,7 +37,7 @@ export default class Validator {
         chooseTest(rule, fieldName, value, values, this.error);
       }
 
-      if (!isrequired && value == undefined)
+      if (!isrequired && value === undefined)
         delete this.error[fieldName];
     }
     
@@ -88,6 +88,9 @@ export default class Validator {
         case "larger":
           isError = larger(value, option.value);
           break;
+          case "fullName":
+          isError = fullName(value);
+          break;
         case "test":
           isError = test(value, option.value);
           break;
@@ -98,9 +101,9 @@ export default class Validator {
       if (isError) {
         let name = option.describe || option.toString();
 
-        error[key] &&
-          (error[key].push(name)) ||
-          (error[key] = [name]);
+        error[key] 
+        ? (error[key].push(name)) 
+        : (error[key] = [name]);
       }
     }
 
@@ -126,6 +129,12 @@ export default class Validator {
 
     function password(pass, rePass) {
       return pass !== rePass;
+    }
+
+    function fullName(string) {
+      let regExp = new RegExp("^\\p{L}+\\s+\\p{L}+$", "u");
+
+      return !regExp.test(string);
     }
 
     function test(str, regExp) {

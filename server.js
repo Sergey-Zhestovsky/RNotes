@@ -1,16 +1,24 @@
 let express = require("express"),
+  http = require('http'),
   bodyParser = require("body-parser"),
   path = require("path"),
   cookieParser = require("cookie-parser"),
-  config = require("./config");
+  config = require("./config"),
   port = process.env.PORT || config.port;
 
 let entryRouter = require("./routes/entry"),
   projectsRouter = require("./routes/projects"),
   authRouter = require("./routes/authorization"),
-  errorRouter = require("./routes/error");
+  errorRouter = require("./routes/error"),
+  NotificationsRouter = require("./routes/notifications");
 
-let app = express();
+let app = express(),
+  notificationsIo;
+
+http = http.Server(app);
+notificationsIo = new NotificationsRouter({
+  connect: http
+});
 
 app.set("dir", __dirname);
 
@@ -26,7 +34,6 @@ app.use("/authorization", authRouter);
 app.use(errorRouter.error);
 app.use(errorRouter.devError);
 
-app.listen(
-  port,
-  () => console.log(`Listening on port ${port}\nhttp://localhost:${port}`)
-);
+http.listen(port, () => {
+  console.log(`Listening on port ${port}\nhttp://localhost:${port}`);
+});

@@ -34,7 +34,7 @@ function getCookie(name) {
   let value = "; " + document.cookie,
     parts = value.split("; " + name + "=");
 
-  if (parts.length == 2)
+  if (parts.length === 2)
     return parts.pop().split(";").shift();
 
   return false;
@@ -46,6 +46,7 @@ export default function authReducer(state = init, action) {
       return {
         ...state,
         isAuthorize: true,
+        user: action.user,
         error: {
           ...state.error,
           signUp: null,
@@ -65,6 +66,7 @@ export default function authReducer(state = init, action) {
       return {
         ...state,
         isAuthorize: false,
+        user: null,
         error: {
           ...state.error,
           signUp: null,
@@ -84,6 +86,7 @@ export default function authReducer(state = init, action) {
       return {
         ...state,
         isAuthorize: true,
+        user: action.user,
         error: {
           ...state.error,
           signUp: null,
@@ -99,9 +102,18 @@ export default function authReducer(state = init, action) {
           signIn: action.error
         }
       };
+    case "USER_PUBLIC_DATA_SUCCES":
+      return {
+        ...state,
+        user: action.user
+      };
+    case "USER_PUBLIC_DATA_ERROR":
+      return {
+        ...state,
+        isAuthorize: false,
+        user: null
+      };
     default:
       return state;
   }
-
-  return state;
 }

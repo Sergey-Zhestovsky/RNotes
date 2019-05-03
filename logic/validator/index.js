@@ -40,7 +40,7 @@ class Validator {
       if (!isrequired && value == undefined)
         delete this.error[fieldName];
     }
-    
+
     function setValue(values, valueName, fieldProperty) {
       if (!values[valueName])
         return null;
@@ -71,7 +71,7 @@ class Validator {
 
     function chooseTest(option, key, value, allValues, error) {
       let isError = false;
-      
+
       switch (option.toString()) {
         case "required":
           isError = required(value);
@@ -88,8 +88,17 @@ class Validator {
         case "larger":
           isError = larger(value, option.value);
           break;
+        case "fullName":
+          isError = fullName(value);
+          break;
         case "test":
           isError = test(value, option.value);
+          break;
+        case "number":
+          isError = number(value);
+          break;
+        case "positive":
+          isError = positive(value);
           break;
         default:
           break;
@@ -128,8 +137,20 @@ class Validator {
       return pass !== rePass;
     }
 
+    function fullName(string) {
+      return !/^\p{L}+\s+\p{L}+$/u.test(string);
+    }
+
     function test(str, regExp) {
       return !regExp.test(str);
+    }
+
+    function number(string) {
+      return !(parseInt(string) == Number(string));
+    }
+
+    function positive(number) {
+      return number < 0;
     }
 
     return this.error;

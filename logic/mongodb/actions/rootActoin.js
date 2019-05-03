@@ -1,10 +1,11 @@
 let mongoose = require("../connect"),
-  schemas = require("../schemas"),
+  schemas = require("../models"),
   errorHandler = require("../errorHandler"),
 
   projectActions = require("./projectActions"),
-  projectImageActions = require("./imageActions");
-  userActions = require("./userActions");
+  projectImageActions = require("./imageActions"),
+  userActions = require("./userActions"),
+  notificationActions = require("./notificationActions");
 
 async function createProject(data = {}) {
   let image = {}, project, result, session;
@@ -12,10 +13,10 @@ async function createProject(data = {}) {
   try {
     session = await mongoose.startSession();
     session.startTransaction();
-
+    
     if (data.image)
       image = await projectImageActions.setImage(data.image, { session });
-
+      
     project = await projectActions.setProject({
       ...data,
       image: image["_id"]
@@ -41,5 +42,6 @@ module.exports = {
   project: projectActions,
   image: projectImageActions,
   user: userActions,
+  notification: notificationActions,
   createProject
 };

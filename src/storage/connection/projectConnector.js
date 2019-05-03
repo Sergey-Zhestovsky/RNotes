@@ -23,9 +23,7 @@ export default class ProjectConnector extends Connector {
   getProjects(data) {
     let path = this.pathStructure;
 
-    return super.straightRequest(path.root + path.getProjects, data, {
-      method: "get"
-    });
+    return super.straightRequest(path.root + path.getProjects, data);
   }
 
   setProject(data) {

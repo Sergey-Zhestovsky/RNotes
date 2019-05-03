@@ -6,7 +6,6 @@ import FormErrors from "./parts/FormErrors";
 import Validator from "../../js/validator";
 import Authorization from "../../hoc/Authorization";
 
-
 import "../../css/CreateProject.css";
 
 class CreateProject extends Component {
@@ -33,7 +32,7 @@ class CreateProject extends Component {
       image: {
         property: ["type", "size"],
         rules: [
-          ["test", this.imageType, "imageType"], 
+          ["test", this.imageType, "imageType"],
           ["larger", this.imageMaxSize, "imageSize"]
         ]
       }
@@ -44,7 +43,7 @@ class CreateProject extends Component {
     this.setState({
       form: {
         ...this.state.form,
-        [e.target.id]: e.target.value
+        [e.target.id]: e.target.value.trim()
       }
     });
   }
@@ -59,7 +58,7 @@ class CreateProject extends Component {
       errors
     });
 
-    if (Object.keys(errors).length == 0) {
+    if (Object.keys(errors).length === 0) {
       project.date = Date.now();
       this.props.createProject(project);
       this.props.history.push('/');
@@ -131,7 +130,7 @@ class CreateProject extends Component {
   }
 
   dragState = (isDragged) => {
-    if (this.dragCounter == 0) {
+    if (this.dragCounter === 0) {
       this.setState({
         isDragged
       });
@@ -151,7 +150,9 @@ class CreateProject extends Component {
             <div className="create-project_form-block">
               <label className="create-project_form-block-title" htmlFor="message">Message</label>
               <textarea name="message" id="message" onChange={this.handleChange} />
-              <span className={`create-project_form-input-describe ${this.messageMaxSize - this.state.form.message.length < 0 && "exceeded" || ""}`}>
+              <span className={`create-project_form-input-describe ${
+                this.messageMaxSize - this.state.form.message.length < 0 ? "exceeded" : ""
+                }`}>
                 {`${this.state.form.message.length} / ${this.messageMaxSize}`}
               </span>
             </div>
@@ -180,5 +181,6 @@ function mapDispatchToProps(dispatch) {
   }
 }
 
-export default connect(null, mapDispatchToProps)
-  (Authorization(CreateProject, { authorized: true, redirect: "/signin" }));
+export default connect(null, mapDispatchToProps)(
+  Authorization(CreateProject, { authorized: true, redirect: "/signin" })
+);

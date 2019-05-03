@@ -8,7 +8,8 @@ export default class UserConnector extends Connector {
       root: pathStructure.root = "",
       setUser: pathStructure.setUser = "",
       logout: pathStructure.logout = "",
-      login: pathStructure.login = ""
+      login: pathStructure.login = "",
+      publicUserData: pathStructure.publicUserData = ""
     } = pathStructure);
 
     this.pathStructure = pathStructure;
@@ -30,5 +31,11 @@ export default class UserConnector extends Connector {
     let path = this.pathStructure;
     
     return super.straightRequest(path.root + path.login, data);
+  }
+
+  getUserPublicData() {
+    let path = this.pathStructure;
+    
+    return super.straightRequest(path.root + path.publicUserData);
   }
 }

@@ -49,11 +49,10 @@ export default class Connector {
 
           return data.result;
         }, (error) => {
-          if (axios.isCancel(error)) {
+          if (axios.isCancel(error))
             throw { error: 'Request canceled' };
-          } else {
-            console.error(error);
-          }
+
+          throw { error };
         });
 
     return {
@@ -69,7 +68,6 @@ export default class Connector {
     switch (error.code) {
       default:
         return Promise.reject(error);
-        break;
     }
   }
 }

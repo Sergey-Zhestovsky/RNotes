@@ -27,10 +27,13 @@ class SignIn extends Component {
   }
 
   handleChange = (e) => {
+    let passwordField = e.target.type === "password",
+      value = passwordField ? e.target.value : e.target.value.trim();
+
     this.setState({
       form: {
         ...this.state.form,
-        [e.target.id]: e.target.value
+        [e.target.id]: value
       }
     });
   }
@@ -45,7 +48,7 @@ class SignIn extends Component {
       errors
     });
 
-    if (Object.keys(errors).length == 0)
+    if (Object.keys(errors).length === 0)
       this.props.signIn(user);
   }
 
@@ -86,5 +89,6 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)
-  (Authorization (SignIn, { authorized: false, redirect: "/" }));
+export default connect(mapStateToProps, mapDispatchToProps)(
+  Authorization(SignIn, { authorized: false, redirect: "/" })
+);

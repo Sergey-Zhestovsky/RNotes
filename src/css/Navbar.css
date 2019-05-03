@@ -27,7 +27,7 @@
   position: relative;
   display: flex;
   align-items: center;
-  height: fill-available;
+  height: stretch;
   margin: 0 15px;
   white-space: nowrap;
   transition: all .125s;
@@ -65,8 +65,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: -webkit-fill-available;
+  height: stretch;
   background-color: #75cac3;
   color: #385170;
   font-weight: 600;
+  text-transform: uppercase;
 }

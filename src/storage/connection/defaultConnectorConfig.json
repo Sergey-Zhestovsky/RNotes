@@ -11,7 +11,8 @@
       "root": "/authorization/",
       "setUser": "signup",
       "logout": "logout",
-      "login": "login"
+      "login": "login",
+      "publicUserData": "public"
     }
   }
 }

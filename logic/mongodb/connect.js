@@ -1,5 +1,5 @@
 let mongoose = require("mongoose"),
-  schemas = require("./schemas"),
+  schemas = require("./models"),
   config = require("../../config");
 
 mongoose.connect(config.mongoDB_connect.replica, config.mongoDB_connect.options)

@@ -2,24 +2,49 @@ export function createProject(project) {
   return (dispatch, getState, { projectConnector }) => {
     projectConnector.setProject(project)
       .then((result) => {
-        dispatch({
-          type: "CREATE_PROJECT",
-          project: result
-        });
+        let time = getState().project.time;
+
+        if (time < result.time)
+          return dispatch({
+            type: "CREATE_PROJECT",
+            result
+          });
       })
       .catch(error => console.error(error))
   }
 }
 
-export function getProjects() {
+export function initProjects({ length = 5 } = {}) {
   return (dispatch, getState, { projectConnector }) => {
-    projectConnector.getProjects()
+    projectConnector.getProjects({ length })
       .then((result) => {
-        console.log(result);
-        
-        dispatch({
+        let time = getState().project.time;
+
+        if (time < result.time)
+          return dispatch({
+            type: "INIT_PROJECTS",
+            result
+          });
+      })
+      .catch(error => console.error(error))
+  }
+}
+
+export function getProjects({ length = 5 } = {}) {
+  return (dispatch, getState, { projectConnector }) => {
+    if (getState().project.allLoaded)
+      return;
+
+    let projects = getState().project.projects,
+      lastProject = projects.length > 0
+        ? projects[projects.length - 1].date
+        : null;
+
+    projectConnector.getProjects({ length, paddingByProjectDate: lastProject })
+      .then((result) => {
+        return dispatch({
           type: "GET_PROJECTS",
-          projects: result
+          result
         });
       })
       .catch(error => console.error(error))

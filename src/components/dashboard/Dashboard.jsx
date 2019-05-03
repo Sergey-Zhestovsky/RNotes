@@ -2,27 +2,33 @@ import React, { Component } from "react";
 import Notifications from "./Notifications";
 import ProjectList from "../projects/ProjectList";
 import { connect } from "react-redux";
-import { getProjects } from "../../storage/actions/projectActions";
-import Authorization from "../../hoc/Authorization";
+import { initProjects, getProjects } from "../../storage/actions/projectActions";
 
 import "../../css/Dashboard.css"
 
 class Dashboard extends Component {
   componentDidMount() {
-    this.props.getProjects();
+    this.props.initProjects();
+  }
+
+  componentWillUnmount() {
+    this.props.clearProjects();
   }
 
   render() {
-    let { projects } = this.props;
+    let { projectObject, events } = this.props;
 
     return (
       <div className="dashboard-wrapper">
         <div className="dashboard container">
           <div className="projects-wrapper">
-            <ProjectList projects={projects} />
+            <ProjectList
+              projectList={projectObject.projects}
+              addButtonHandler={this.props.getProjects}
+              allLoaded={projectObject.allLoaded} />
           </div>
           <div className="notifications-wrapper">
-            <Notifications />
+            <Notifications events={events} />
           </div>
         </div>
       </div>
@@ -32,15 +38,18 @@ class Dashboard extends Component {
 
 function mapStateToProps(state) {
   return {
-    projects: state.project.projects
+    projectObject: state.project,
+    events: state.notification
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    getProjects: () => dispatch(getProjects())
+    initProjects: (length) => dispatch(initProjects(length)),
+    getProjects: (length) => dispatch(getProjects(length)),
+    clearProjects: () => dispatch({ type: "CLEAR_PROJECTS" })
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)
-  (Authorization(Dashboard, { authorized: true, redirect: "/signin" }));
+export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
+  //(Authorization(Dashboard, { authorized: true, redirect: "/signin" }));

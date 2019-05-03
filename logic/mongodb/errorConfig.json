@@ -7,5 +7,11 @@
   },
   "setUser": {
     "custom002": "email already exists"
+  },
+  "getPublicUserData": {
+    "custom003": "user not found"
+  },
+  "getSourceProject": {
+    "custom004": "project not found"
   }
 }

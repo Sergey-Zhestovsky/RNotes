@@ -1,8 +1,8 @@
 let mongoose = require("../connect"),
-  schemas = require("../schemas"),
+  schemas = require("../models"),
   errorHandler = require("../errorHandler");
 
-  async function setImage(data, config) {
+async function setImage({ buffer, ...data }, config) {
   let image = new schemas.ProjectImage(data),
     responce;
 
