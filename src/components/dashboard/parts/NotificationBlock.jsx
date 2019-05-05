@@ -10,7 +10,7 @@ export default function NotificationBlock(props) {
         <span className="notification_body-context-user">{event.user}</span>
         <span className="notification_body-context-message">{event.action}</span>
       </div>
-      <div className="notification_body-block-date">{moment(event.date).calendar()}</div>
+      <div className="notification_body-block-date">{moment(event.date).fromNow()}</div>
     </div>
   );
 }
