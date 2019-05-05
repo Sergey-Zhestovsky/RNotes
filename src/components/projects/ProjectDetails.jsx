@@ -14,11 +14,9 @@ class ProjectDetails extends Component {
       isFound: true,
       project: null
     };
-
-    this.getProject(this.props.match.params.id);
   }
 
-  getProject = (id) => {
+  getProject (id) {
     return rootConnector.projectConnector.getProject(id)
       .then((result) => {
         if (!result)
@@ -34,11 +32,14 @@ class ProjectDetails extends Component {
           isFound: false
         })
       })
-
   }
 
   onBackButtonClick = (e) => {
     return this.props.history.push('/');
+  }
+
+  componentDidMount() {
+    this.getProject(this.props.match.params.id);
   }
 
   render() {
@@ -56,7 +57,6 @@ class ProjectDetails extends Component {
       </div>
     );
   }
-
 }
 
 export default Authorization(ProjectDetails, { authorized: true, redirect: "/signin" });

@@ -8,35 +8,41 @@ import SignIn from "./components/auth/SignIn";
 import SignUp from "./components/auth/SignUp";
 import { connect } from "react-redux";
 import { getUserPublicData } from "./storage/actions/userActions";
-import { createNotificationSocket } from "./storage/actions/notificationActions";
+import * as NotificationSocket from "./storage/actions/notificationActions";
 
 class App extends Component {
-    constructor(props) {
-      super(props);
-
-      props.getUserPublicData();
-      props.createNotificationSocket();
-    }
-
-    render() {
-      let { authorization } = this.props;
-      
-      return (
-        <Router>
-          <div className="App">
-            <Navbar authorization={authorization} />
-            <Switch>
-              <Route path={["/", "/dashboard"]} exact component={Dashboard} />
-              <Route path={"/project/:id"} component={ProjectDetails} />
-              <Route path={"/newproject"} component={CreateProject} />
-              <Route path={"/signin"} component={SignIn} />
-              <Route path={"/signup"} component={SignUp} />
-            </Switch>
-          </div>
-        </Router>
-      );
-    }
+  constructor(props) {
+    super(props);
   }
+
+  componentDidMount() {
+    this.props.getUserPublicData();
+    this.props.createNotificationSocket();
+  }
+
+  render() {
+    let { authorization } = this.props;
+
+    return (
+      <Router>
+        <div className="App">
+          <Navbar authorization={authorization} />
+          <Switch>
+            <Route path={["/", "/dashboard"]} exact component={Dashboard} />
+            <Route path={"/project/:id"} component={ProjectDetails} />
+            <Route path={"/newproject"} component={CreateProject} />
+            <Route path={"/signin"} component={SignIn} />
+            <Route path={"/signup"} component={SignUp} />
+          </Switch>
+        </div>
+      </Router>
+    );
+  }
+
+  componentWillUnmount() {
+    this.props.disconnectNotificationSocket();
+  }
+}
 
 function mapStateToProps(state) {
   return {
@@ -47,7 +53,10 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     getUserPublicData: () => dispatch(getUserPublicData()),
-    createNotificationSocket: () => dispatch(createNotificationSocket())
+    createNotificationSocket: () =>
+      dispatch(NotificationSocket.createNotificationSocket()),
+    disconnectNotificationSocket: () =>
+      dispatch(NotificationSocket.disconnectNotificationSocket())
   };
 }
 

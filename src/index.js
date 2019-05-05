@@ -1,10 +1,10 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React from "react";
+import ReactDOM from "react-dom";
 import "normalize.css";
-import './css/index.css';
-import './css/fonts.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+import "./css/index.css";
+import "./css/fonts.css";
+import App from "./App";
+import * as serviceWorker from "./serviceWorker";
 import { createStore, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
 import rootReducer from "./storage/reducers/rootReducer";
@@ -18,6 +18,6 @@ let store = createStore(
 
 ReactDOM.render(
   <Provider store={store}><App /></Provider>,
-  document.getElementById('root')
+  document.getElementById("root")
 );
 serviceWorker.unregister();

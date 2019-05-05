@@ -1,8 +1,10 @@
 import Socket from "socket.io-client";
 
+let socket;
+
 export function createNotificationSocket() {
   return (dispatch, getState) => {
-    let socket = Socket();
+    socket = Socket();
 
     socket.on("new notification", (notification) => {
       dispatch({
@@ -32,4 +34,9 @@ export function createNotificationSocket() {
       });
     });
   }
+}
+
+export function disconnectNotificationSocket() {
+  if (socket)
+    socket.disconnect();
 }
