@@ -10,9 +10,10 @@
 
 # production
 /build
-/public/img
+/public/img/uploads
 /src/fonts
-/src/img
+/src/img/*
+!/src/img/RNlogo.png
 /data/
 # misc
 .DS_Store
