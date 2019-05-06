@@ -13,7 +13,7 @@
 /public/img/uploads
 /src/fonts
 /src/img/*
-!/src/img/RNlogo.png
+!/src/img/logo.png
 /data/
 # misc
 .DS_Store

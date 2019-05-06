@@ -1,10 +1,8 @@
-![RNotes Logo](/src/img/RNlogo.png)
+![RNotes Logo](/src/img/logo.png)
 
 # RNotes
 
-## About
-
-React app with Redux and Node.js server based on Express middleware.<hr/>
+React app with Redux and Node.js server based on Express middleware.<br/>
 
 In the project directory, you can run:
 
